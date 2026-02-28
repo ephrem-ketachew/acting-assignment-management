@@ -43,4 +43,5 @@ next-env.d.ts
 # local plans and rules (do not push)
 /PLAN.md
 /PLAN-phase-0.md
+/PLAN-phase-1.md
 /.cursorrules
