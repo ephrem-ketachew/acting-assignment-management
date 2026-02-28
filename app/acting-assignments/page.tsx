@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, Suspense } from "react";
+import { useCallback, Suspense, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import {
     Table,
     TableBody,
@@ -19,13 +20,16 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useActingAssignmentsList } from "@/hooks/use-acting-assignments";
-import { formatDate } from "@/lib/dayjs-format";
+import { formatDate, daysUntilEnd } from "@/lib/dayjs-format";
+import { getExpirationReminderDays } from "@/lib/expiration-reminder-config";
 import { StatusBadge } from "@/components/acting/status-badge";
-import type { ActingAssignmentStatus } from "@/models/acting-assignment";
+import type { ActingAssignment, ActingAssignmentStatus } from "@/models/acting-assignment";
 
 const STATUS_OPTIONS: { value: string; label: string }[] = [
     { value: "all", label: "All" },
+    { value: "Scheduled", label: "Scheduled" },
     { value: "Active", label: "Active" },
     { value: "Expired", label: "Expired" },
     { value: "Terminated Early", label: "Terminated Early" },
@@ -58,6 +62,44 @@ function ActingAssignmentsListContent(): React.ReactElement {
     );
 
     const displayStatus = statusFilter === null ? "all" : statusFilter;
+
+    const reminderDays = getExpirationReminderDays();
+
+    function isExpiringSoon(a: ActingAssignment): boolean {
+        if (a.status !== "Active") return false;
+        const days = daysUntilEnd(a.expectedEndDate);
+        return days >= 0 && days <= reminderDays;
+    }
+
+    const expiringSoonCount =
+        assignments !== undefined
+            ? assignments.filter(isExpiringSoon).length
+            : 0;
+    const hasShownExpiringToast = useRef<boolean>(false);
+
+    useEffect(() => {
+        if (
+            !isLoading &&
+            assignments !== undefined &&
+            expiringSoonCount > 0 &&
+            !hasShownExpiringToast.current
+        ) {
+            hasShownExpiringToast.current = true;
+            toast.info(
+                `${expiringSoonCount} assignment(s) expire within ${reminderDays} days`
+            );
+        }
+    }, [isLoading, assignments, expiringSoonCount, reminderDays]);
+
+    function ExpiringSoonBadge({ expectedEndDate }: { expectedEndDate: string }): React.ReactElement {
+        const days = daysUntilEnd(expectedEndDate);
+        const label = days === 0 ? "Expires today" : `Expires in ${days} day${days === 1 ? "" : "s"}`;
+        return (
+            <Badge variant="secondary" className="ml-1 whitespace-nowrap">
+                {label}
+            </Badge>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-background text-foreground p-4 md:p-6">
@@ -143,11 +185,20 @@ function ActingAssignmentsListContent(): React.ReactElement {
                                                 {formatDate(a.expectedEndDate)}
                                             </TableCell>
                                             <TableCell>
-                                                <StatusBadge
-                                                    status={
-                                                        a.status as ActingAssignmentStatus
-                                                    }
-                                                />
+                                                <div className="flex flex-wrap items-center gap-1">
+                                                    <StatusBadge
+                                                        status={
+                                                            a.status as ActingAssignmentStatus
+                                                        }
+                                                    />
+                                                    {isExpiringSoon(a) && (
+                                                        <ExpiringSoonBadge
+                                                            expectedEndDate={
+                                                                a.expectedEndDate
+                                                            }
+                                                        />
+                                                    )}
+                                                </div>
                                             </TableCell>
                                             <TableCell>
                                                 <Button

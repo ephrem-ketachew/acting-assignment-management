@@ -2,6 +2,7 @@
  * Status values for acting assignment lifecycle.
  */
 export type ActingAssignmentStatus =
+    | "Scheduled"
     | "Active"
     | "Expired"
     | "Terminated Early"

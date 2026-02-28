@@ -16,3 +16,16 @@ export function formatDate(value: string | Date): string {
 export function formatTimestamp(value: string | Date): string {
     return dayjs(value).format(TIMESTAMP_FORMAT);
 }
+
+/**
+ * Days from reference date (default today) until end date. Uses date-only comparison.
+ * Positive = end is in the future, 0 = end is today, negative = end is in the past.
+ */
+export function daysUntilEnd(
+    expectedEndDate: string,
+    referenceDate?: string | Date
+): number {
+    const end = dayjs(expectedEndDate).startOf("day");
+    const ref = referenceDate !== undefined ? dayjs(referenceDate).startOf("day") : dayjs().startOf("day");
+    return end.diff(ref, "day");
+}

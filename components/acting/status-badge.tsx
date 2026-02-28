@@ -7,6 +7,7 @@ const STATUS_VARIANTS: Record<
     ActingAssignmentStatus,
     "default" | "secondary" | "destructive" | "outline"
 > = {
+    Scheduled: "outline",
     Active: "default",
     Expired: "destructive",
     "Terminated Early": "secondary",
