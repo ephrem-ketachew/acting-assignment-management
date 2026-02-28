@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Home(): React.ReactElement {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background text-foreground p-4">
-            <main className="flex flex-col items-center gap-6 text-center">
+            <main id="main-content" className="flex flex-col items-center gap-6 text-center">
                 <h1 className="text-2xl font-semibold">
                     Acting Assignment Management
                 </h1>

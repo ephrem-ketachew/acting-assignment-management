@@ -125,14 +125,14 @@ export default function NewActingAssignmentPage(): React.ReactElement {
     );
 
     return (
-        <div className="min-h-screen bg-background text-foreground p-4 md:p-6">
+        <main id="main-content" className="min-h-screen bg-background text-foreground p-4 md:p-6">
             <div className="mx-auto max-w-2xl space-y-6">
-                <div className="flex items-center gap-4">
+                <header className="flex items-center gap-4">
                     <Button variant="ghost" size="sm" asChild>
                         <Link href="/acting-assignments">Back</Link>
                     </Button>
                     <h1 className="text-2xl font-semibold">New acting assignment</h1>
-                </div>
+                </header>
 
                 <Form {...form}>
                     <form
@@ -327,6 +327,6 @@ export default function NewActingAssignmentPage(): React.ReactElement {
                     </form>
                 </Form>
             </div>
-        </div>
+        </main>
     );
 }

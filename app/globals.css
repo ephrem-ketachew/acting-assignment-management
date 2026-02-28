@@ -81,3 +81,41 @@ body {
     color: var(--foreground);
     font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Skip link: visually hidden until focused (4.1.3, 4.1.4) */
+.skip-link {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    z-index: 50;
+    width: auto;
+    height: auto;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    border-radius: var(--radius-md);
+    background: var(--primary);
+    color: var(--primary-foreground);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ring);
+}
+
+/* Visible focus for links (4.1.4) */
+a:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}

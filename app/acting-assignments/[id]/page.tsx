@@ -50,40 +50,43 @@ function DetailContent({ id }: { id: string }): React.ReactElement {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-background p-4 md:p-6">
+            <main id="main-content" className="min-h-screen bg-background p-4 md:p-6" aria-busy="true">
                 <p className="text-muted-foreground">Loading…</p>
-            </div>
+            </main>
         );
     }
 
     if (isError || assignment === undefined) {
         return (
-            <div className="min-h-screen bg-background p-4 md:p-6">
-                <p className="text-destructive">
+            <main id="main-content" className="min-h-screen bg-background p-4 md:p-6">
+                <p className="text-destructive" role="alert">
                     {error instanceof Error ? error.message : "Assignment not found"}
                 </p>
                 <Button variant="link" asChild className="mt-2">
                     <Link href="/acting-assignments">Back to list</Link>
                 </Button>
-            </div>
+            </main>
         );
     }
 
     const status = assignment.status as ActingAssignmentStatus;
 
     return (
-        <div className="min-h-screen bg-background text-foreground p-4 md:p-6">
+        <main id="main-content" className="min-h-screen bg-background text-foreground p-4 md:p-6">
             <div className="mx-auto max-w-3xl space-y-6">
-                <div className="flex items-center gap-4">
+                <header className="flex items-center gap-4">
                     <Button variant="ghost" size="sm" asChild>
                         <Link href="/acting-assignments">Back to list</Link>
                     </Button>
-                </div>
+                </header>
 
+                <section aria-labelledby="assignment-heading">
                 <Card>
                     <CardHeader>
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                            <CardTitle>Acting assignment</CardTitle>
+                            <CardTitle id="assignment-heading">
+                                <h1 className="text-lg font-semibold leading-none tracking-tight">Acting assignment</h1>
+                            </CardTitle>
                             <StatusBadge status={status} />
                         </div>
                         <CardDescription>
@@ -191,8 +194,9 @@ function DetailContent({ id }: { id: string }): React.ReactElement {
                         )}
                     </CardContent>
                 </Card>
+                </section>
             </div>
-        </div>
+        </main>
     );
 }
 
@@ -202,12 +206,12 @@ export default function ActingAssignmentDetailPage(): React.ReactElement {
 
     if (id === "") {
         return (
-            <div className="min-h-screen bg-background p-4 md:p-6">
-                <p className="text-destructive">Invalid assignment ID</p>
+            <main id="main-content" className="min-h-screen bg-background p-4 md:p-6">
+                <p className="text-destructive" role="alert">Invalid assignment ID</p>
                 <Button variant="link" asChild className="mt-2">
                     <Link href="/acting-assignments">Back to list</Link>
                 </Button>
-            </div>
+            </main>
         );
     }
 

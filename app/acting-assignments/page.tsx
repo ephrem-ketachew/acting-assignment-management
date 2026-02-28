@@ -102,9 +102,9 @@ function ActingAssignmentsListContent(): React.ReactElement {
     }
 
     return (
-        <div className="min-h-screen bg-background text-foreground p-4 md:p-6">
+        <main id="main-content" className="min-h-screen bg-background text-foreground p-4 md:p-6">
             <div className="mx-auto max-w-6xl space-y-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <h1 className="text-2xl font-semibold">
                         Acting Assignments
                     </h1>
@@ -113,7 +113,7 @@ function ActingAssignmentsListContent(): React.ReactElement {
                             value={displayStatus}
                             onValueChange={setStatusFilter}
                         >
-                            <SelectTrigger className="w-[200px]">
+                            <SelectTrigger className="w-[200px]" aria-label="Filter by status">
                                 <SelectValue placeholder="Filter by status" />
                             </SelectTrigger>
                             <SelectContent>
@@ -133,7 +133,7 @@ function ActingAssignmentsListContent(): React.ReactElement {
                             </Link>
                         </Button>
                     </div>
-                </div>
+                </header>
 
                 {isLoading && (
                     <p className="text-muted-foreground">Loading…</p>
@@ -149,7 +149,7 @@ function ActingAssignmentsListContent(): React.ReactElement {
                             No assignments found.
                         </p>
                     ) : (
-                        <div className="rounded-md border">
+                        <section aria-label="Assignments list" className="rounded-md border">
                             <Table>
                                 <TableHeader>
                                     <TableRow>
@@ -217,17 +217,17 @@ function ActingAssignmentsListContent(): React.ReactElement {
                                     ))}
                                 </TableBody>
                             </Table>
-                        </div>
+                        </section>
                     )
                 )}
             </div>
-        </div>
+        </main>
     );
 }
 
 export default function ActingAssignmentsPage(): React.ReactElement {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-background p-4 md:p-6"><p className="text-muted-foreground">Loading…</p></div>}>
+        <Suspense fallback={<main id="main-content" className="min-h-screen bg-background p-4 md:p-6" aria-busy="true"><p className="text-muted-foreground">Loading…</p></main>}>
             <ActingAssignmentsListContent />
         </Suspense>
     );
